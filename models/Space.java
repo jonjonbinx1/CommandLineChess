@@ -2,7 +2,7 @@ package models;
 
 public class Space {
     private String name;
-    private Piece piece = null;
+    private Piece piece;
 
     public String getName() {
         return name;
@@ -10,5 +10,10 @@ public class Space {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public Space(String name, Piece piece) {
+        this.name = name;
+        this.piece = piece;
     }
 }
