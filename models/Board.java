@@ -17,4 +17,8 @@ public class Board {
         }
         return null;
     }
+
+    public Board(List<Space> board) {
+        this.board = board;
+    }
 }
