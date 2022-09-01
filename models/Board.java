@@ -3,22 +3,28 @@ package models;
 import java.util.List;
 
 public class Board {
-    List<Space> board;
+    List<List<Space>> board;
 
-    public List<Space> getBoard() {
+    public List<List<Space>> getBoard() {
         return board;
     }
 
     public Space getSpecificSpace(String spaceName){
-        for(Space space : board){
-            if(space.getName().equals(spaceName)){
-                return space;
+        for(List<Space> row : board){
+            for(Space space : row) {
+                if (space.getName().equals(spaceName)) {
+                    return space;
+                }
             }
         }
         return null;
     }
 
-    public Board(List<Space> board) {
+    public void setSpecificSpace(Piece piece, int row, int column){
+        board.get(row).set(column , new Space((row + ":" + column) , piece));
+    }
+
+    public Board(List<List<Space>> board) {
         this.board = board;
     }
 }
