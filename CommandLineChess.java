@@ -25,8 +25,9 @@ public class CommandLineChess {
 
     private static void printBoard(Board board){
         for(int newLines = 0; newLines < 3; newLines++) {
-            System.out.println();
+            System.out.println("\u001B[0m");
         }
+        System.out.println();
         for(List<Space> row : board.getBoard()){
             for (Space space : row) {
                 String color = null;
@@ -89,12 +90,12 @@ public class CommandLineChess {
                 }
 
                 if (bluesTurn) {
-                    if (pieceName.contains("dark")) {
+                    if (pieceName.contains("red")) {
                         System.out.println("please select one of your own pieces");
                         continue;
                     }
                 } else {
-                    if (pieceName.contains("light")) {
+                    if (pieceName.contains("blue")) {
                         System.out.println("please select one of your own pieces");
                         continue;
                     }

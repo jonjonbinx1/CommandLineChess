@@ -25,6 +25,8 @@ public class PieceMovement {
             canMove = moveBishop(piece, row, column, board, currentSpace);
         }else if(pieceName.contains("kn")){
             canMove = moveKnight(piece, row, column, board, currentSpace);
+        }else if(pieceName.contains("r")){
+            canMove = moveRook(piece,row,column,board,currentSpace);
         }
         return canMove;
     }
@@ -135,10 +137,10 @@ public class PieceMovement {
         return moved;
     }
 
-    private boolean moveKnight(Piece piece, int row, int column, Board board, Space space){
+    private boolean moveKnight(Piece piece, int row, int column, Board board, Space currentSpace){
         boolean moved = false;
-        int currentRow = Integer.parseInt(space.getName().charAt(0) + "");
-        int currentColumn = Integer.parseInt(space.getName().charAt(2) + "");
+        int currentRow = Integer.parseInt(currentSpace.getName().charAt(0) + "");
+        int currentColumn = Integer.parseInt(currentSpace.getName().charAt(2) + "");
 
         int rowDif = Math.abs((row - currentRow));
         int columnDif = Math.abs((column - currentColumn));
@@ -161,6 +163,83 @@ public class PieceMovement {
                     board.setSpecificSpace(piece, row, column);
                     board.setSpecificSpace(null, currentRow, currentColumn);
                 }
+            }
+        }
+        return moved;
+    }
+
+    private boolean moveRook(Piece piece, int row, int column, Board board, Space currentSpace){
+        boolean moved = false;
+
+        int currentRow = Integer.parseInt(currentSpace.getName().charAt(0) + "");
+        int currentColumn = Integer.parseInt(currentSpace.getName().charAt(2) + "");
+
+        int start;
+        int end;
+        int constant;
+        boolean constantIsRow;
+
+
+        if(row == currentRow){
+            start = currentColumn;
+            end = column;
+            constant = row;
+            constantIsRow = true;
+        }else{
+            start = row;
+            end = currentRow;
+            constant = column;
+            constantIsRow = false;
+        }
+
+        int direction = 1;
+
+        if(start > end){
+            direction = -1;
+        }
+
+        boolean shouldBlock = false;
+
+        while (start != end){
+            String spaceToCheck;
+
+            if(constantIsRow){
+                spaceToCheck = constant + ":" + start;
+            }else{
+                spaceToCheck = start + ":" + constant;
+            }
+
+            System.out.println(spaceToCheck);
+            if(spaceToCheck.equals(currentSpace.getName())){
+                start += direction;
+                continue;
+            }
+
+            if(spaceToCheck.equals((row + ":" + column))){
+                start += direction;
+                continue;
+            }
+
+            Piece toCheck = board.getSpecificSpace(spaceToCheck).getPiece();
+            if(toCheck != null){
+                shouldBlock = true;
+            }
+            start += direction;
+        }
+
+        if(!shouldBlock){
+            if(board.getSpecificSpace(row + ":" + column).getPiece() != null){
+                if(board.getSpecificSpace(row + ":" + column).getPiece().isBlue() == piece.isBlue()){
+                    return false;
+                }else{
+                    moved = true;
+                    board.setSpecificSpace(piece, row, column);
+                    board.setSpecificSpace(null, currentRow, currentColumn);
+                }
+            }else{
+                moved = true;
+                board.setSpecificSpace(piece, row, column);
+                board.setSpecificSpace(null, currentRow, currentColumn);
             }
         }
         return moved;
