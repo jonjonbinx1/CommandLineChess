@@ -78,6 +78,11 @@ public class CommandLineChess {
                 System.out.println("what piece would you like to move");
                 String pieceName = userInput.nextLine();
 
+                if(pieceName.isEmpty()){
+                    System.out.println("please enter a valid value (ie. blue p1)");
+                    continue ;
+                }
+
                 if(pieceName.equals("print")){
                     printBoard(gameBoard);
                     continue turnLoop;
@@ -113,15 +118,36 @@ public class CommandLineChess {
                     inputValid = true;
                 }
             }
-
             System.out.println("where would you like to move this piece");
             String spaceToMoveTo = userInput.nextLine();
-            turnPassed = pieceMovement.movePiece(currentPiece, currentSpace, spaceToMoveTo, gameBoard);
 
+            if(spaceToMoveTo.isEmpty()){
+                System.out.println("Please enter a valid space value (ie. 2:3)");
+                return bluesTurn;
+            }
+            if(Character.isDigit(spaceToMoveTo.charAt(0)) && Character.isDigit(spaceToMoveTo.charAt(2))){
+                int row = Integer.parseInt(spaceToMoveTo.charAt(0) + "");
+                int column = Integer.parseInt(spaceToMoveTo.charAt(2) + "");
+                if(withinBounds(row,column)) {
+                    if (spaceToMoveTo.charAt(1) == ':') {
+                        if (spaceToMoveTo.length() == 3) {
+                            turnPassed = pieceMovement.movePiece(currentPiece, currentSpace, spaceToMoveTo, gameBoard);
+                        }
+                    }
+                }
+            }
             if(!turnPassed){
                 System.out.println("Could not move " + currentPiece.getName() + " to " + spaceToMoveTo + " please try another move");
             }
         }
         return !bluesTurn;
+    }
+
+    private static boolean withinBounds(int row, int column){
+        boolean inbounds = true;
+        if(row > 7 || row < 0 || column > 7 || column < 0){
+            inbounds = false;
+        }
+        return inbounds;
     }
 }

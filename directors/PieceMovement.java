@@ -18,10 +18,13 @@ public class PieceMovement {
             //TODO handle this, likely before we get to this method
         }
         String pieceName = piece.getName();
+        pieceName = pieceName.split(" ")[1];
         if(pieceName.contains("p")){
             canMove = movePawn(piece, row, column, board, currentSpace);
         }else if(pieceName.contains("b")){
             canMove = moveBishop(piece, row, column, board, currentSpace);
+        }else if(pieceName.contains("kn")){
+            canMove = moveKnight(piece, row, column, board, currentSpace);
         }
         return canMove;
     }
@@ -127,6 +130,37 @@ public class PieceMovement {
                 moved = true;
                 board.setSpecificSpace(piece, row, column);
                 board.setSpecificSpace(null, currentRow, currentColumn);
+            }
+        }
+        return moved;
+    }
+
+    private boolean moveKnight(Piece piece, int row, int column, Board board, Space space){
+        boolean moved = false;
+        int currentRow = Integer.parseInt(space.getName().charAt(0) + "");
+        int currentColumn = Integer.parseInt(space.getName().charAt(2) + "");
+
+        int rowDif = Math.abs((row - currentRow));
+        int columnDif = Math.abs((column - currentColumn));
+        int totalDif = Math.abs((rowDif - columnDif));
+
+        if(totalDif == 1){
+            if((0 < rowDif && rowDif < 3) && (0 < columnDif && columnDif < 3)){
+                Space checkSpace = board.getSpecificSpace(row + ":" + column);
+                if(checkSpace.getPiece() != null){
+                    if(checkSpace.getPiece().isBlue() == piece.isBlue()){
+                        System.out.println("Can't play knight on top of your own piece");
+                        return false;
+                    }else{
+                        moved = true;
+                        board.setSpecificSpace(piece, row, column);
+                        board.setSpecificSpace(null, currentRow, currentColumn);
+                    }
+                }else{
+                    moved = true;
+                    board.setSpecificSpace(piece, row, column);
+                    board.setSpecificSpace(null, currentRow, currentColumn);
+                }
             }
         }
         return moved;
