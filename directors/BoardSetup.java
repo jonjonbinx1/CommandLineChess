@@ -19,53 +19,53 @@ public class BoardSetup {
         List<Piece> result = new ArrayList<>();
 
 
-        //make lightColored Back Row
-        Piece lightBack = new Piece("light r1", true);
-        result.add(lightBack);
-        lightBack = new Piece("light kn1", true);
-        result.add(lightBack);
-        lightBack = new Piece("light b1", true);
-        result.add(lightBack);
-        lightBack = new Piece("light queen", true);
-        result.add(lightBack);
-        lightBack = new Piece("light king", true);
-        result.add(lightBack);
-        lightBack = new Piece("light b2", true);
-        result.add(lightBack);
-        lightBack = new Piece("light kn2", true);
-        result.add(lightBack);
-        lightBack = new Piece("light r2", true);
-        result.add(lightBack);
+        //make blueColored Back Row
+        Piece blueBack = new Piece("blue r1", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue kn1", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue b1", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue queen", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue king", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue b2", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue kn2", true);
+        result.add(blueBack);
+        blueBack = new Piece("blue r2", true);
+        result.add(blueBack);
 
-        //get lightColoredPawns
+        //get blueColoredPawns
         for(int i = 1; i < 9; i++){
-            Piece piece = new Piece("light p"+i, true);
+            Piece piece = new Piece("blue p"+i, true);
             result.add(piece);
         }
 
-        //make dark colored pawns
+        //make red colored pawns
         for(int i = 1; i < 9; i++){
-            Piece piece = new Piece("dark p"+i, false);
+            Piece piece = new Piece("red p"+i, false);
             result.add(piece);
         }
 
-        //make dark colored back row
-        Piece darkBack = new Piece("dark r1", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark kn1", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark b1", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark king", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark queen", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark b2", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark kn2", false);
-        result.add(darkBack);
-        darkBack = new Piece("dark r2", false);
-        result.add(darkBack);
+        //make red colored back row
+        Piece redBack = new Piece("red r1", false);
+        result.add(redBack);
+        redBack = new Piece("red kn1", false);
+        result.add(redBack);
+        redBack = new Piece("red b1", false);
+        result.add(redBack);
+        redBack = new Piece("red king", false);
+        result.add(redBack);
+        redBack = new Piece("red queen", false);
+        result.add(redBack);
+        redBack = new Piece("red b2", false);
+        result.add(redBack);
+        redBack = new Piece("red kn2", false);
+        result.add(redBack);
+        redBack = new Piece("red r2", false);
+        result.add(redBack);
         return result;
     }
 

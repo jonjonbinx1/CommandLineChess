@@ -13,35 +13,14 @@ public class CommandLineChess {
         Board gameBoard = boardSetup.initialSetup();
 
         Scanner userInput = new Scanner(System.in);
-
         PieceMovement pieceMovement = new PieceMovement();
 
+        boolean bluesTurn = true;
+        boolean gameWon = false;
 
-//        Board board = gameBoard.getBoard();
-        printBoard(gameBoard);
-
-        System.out.println("what piece would you like to move");
-        String pieceName = userInput.nextLine();
-        Space currentSpace = null;
-        Piece currentPiece = null;
-        //TODO validate user input
-        for(List<Space> row : gameBoard.getBoard()){
-            for(Space space : row){
-                if(space.getPiece() != null) {
-                    if (pieceName.equals(space.getPiece().getName())) {
-                        currentSpace = space;
-                        currentPiece = currentSpace.getPiece();
-                    }
-                }
-            }
+        while (!gameWon){
+            bluesTurn = playersTurn(gameBoard, userInput, pieceMovement, bluesTurn);
         }
-
-        System.out.println("where would you like to move this piece");
-        String spaceToMoveTo = userInput.nextLine();
-        System.out.println("attempting to move piece " + currentPiece.getName());
-       System.out.println(pieceMovement.movePiece(currentPiece, currentSpace, spaceToMoveTo, gameBoard));
-
-        printBoard(gameBoard);
     }
 
     private static void printBoard(Board board){
@@ -50,17 +29,99 @@ public class CommandLineChess {
         }
         for(List<Space> row : board.getBoard()){
             for (Space space : row) {
+                String color = null;
+                String colorReset = "\u001B[0m";
                 String pieceName = null;
                 if (space.getPiece() != null) {
                     pieceName = space.getPiece().getName();
+                    if(space.getPiece().isBlue()){
+                        color = "\u001B[36m";
+                        pieceName = pieceName;
+                    }else{
+                        color = "\033[1;31m";
+                        //black ansi "\u001B[30m"
+                        pieceName = pieceName;
+                    }
                 } else {
                     pieceName = "none";
                 }
+                if(color != null) {
+                    System.out.print(color);
+                }
                 System.out.printf("%-20s" , space.getName() + "/" +pieceName + "   ");
+                System.out.print(colorReset);
+                color = null;
             }
             for(int newLines = 0; newLines < 3; newLines++) {
                 System.out.println();
             }
         }
+    }
+    private static boolean playersTurn(Board gameBoard, Scanner userInput, PieceMovement pieceMovement, boolean bluesTurn){
+        printBoard(gameBoard);
+        boolean turnPassed = false;
+
+        turnLoop:
+        while(!turnPassed) {
+            if (bluesTurn) {
+                System.out.println( "\u001B[36m"+ "blues turn");
+            } else {
+                System.out.println("\033[1;31m" + "reds turn");
+            }
+
+            Space currentSpace = null;
+            Piece currentPiece = null;
+
+            //boolean to check if userInput is valid
+            boolean inputValid = false;
+            while (!inputValid) {
+                System.out.println("what piece would you like to move");
+                String pieceName = userInput.nextLine();
+
+                if(pieceName.equals("print")){
+                    printBoard(gameBoard);
+                    continue turnLoop;
+                }
+
+                if (bluesTurn) {
+                    if (pieceName.contains("dark")) {
+                        System.out.println("please select one of your own pieces");
+                        continue;
+                    }
+                } else {
+                    if (pieceName.contains("light")) {
+                        System.out.println("please select one of your own pieces");
+                        continue;
+                    }
+                }
+
+
+                //TODO validate user input
+                for (List<Space> row : gameBoard.getBoard()) {
+                    for (Space space : row) {
+                        if (space.getPiece() != null) {
+                            if (pieceName.equals(space.getPiece().getName())) {
+                                currentSpace = space;
+                                currentPiece = currentSpace.getPiece();
+                            }
+                        }
+                    }
+                }
+                if (currentPiece == null) {
+                    System.out.println("piece you wished to select is not on the board please select a piece on the board");
+                } else {
+                    inputValid = true;
+                }
+            }
+
+            System.out.println("where would you like to move this piece");
+            String spaceToMoveTo = userInput.nextLine();
+            turnPassed = pieceMovement.movePiece(currentPiece, currentSpace, spaceToMoveTo, gameBoard);
+
+            if(!turnPassed){
+                System.out.println("Could not move " + currentPiece.getName() + " to " + spaceToMoveTo + " please try another move");
+            }
+        }
+        return !bluesTurn;
     }
 }
